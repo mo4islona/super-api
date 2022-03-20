@@ -70,4 +70,4 @@ processor.addExtrinsicHandler(
     modules.balances.extrinsics.handleTransferAll
 )
 
-processor.run()
+// processor.run()
