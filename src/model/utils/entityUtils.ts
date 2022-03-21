@@ -1,7 +1,7 @@
 import { EventHandlerContext } from '@subsquid/substrate-processor'
 import chains from '../../chains'
 import config from '../../config'
-import { Account, Chain, Token } from '..'
+import { Account, Chain, Token } from '../generated'
 import { ChainInfo, ChainName } from '../../types/custom/chainInfo'
 
 export async function getChain(ctx: EventHandlerContext, id: ChainName, data?: Partial<Chain>): Promise<Chain> {
@@ -35,6 +35,8 @@ export async function getAccount(
     if (!account) {
         account = new Account({
             id: id.toString(),
+            totalReward: 0n,
+            totalStake: 0n,
             chain: await getChain(ctx, config.chainName),
             ...data,
         })

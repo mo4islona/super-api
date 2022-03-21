@@ -2,11 +2,11 @@
 import { ProcessorConfig } from './types/custom/processorConfig'
 
 const config: ProcessorConfig = {
-    chainName: 'statemine',
-    prefix: 2,
+    chainName: 'robonomics',
+    prefix: 'robonomics',
     dataSource: {
-        archive: 'https://statemine.indexer.gc.subsquid.io/v4/graphql',
-        chain: 'wss://statemine.api.onfinality.io/public-ws',
+        archive: 'https://robonomics.indexer.gc.subsquid.io/v4/graphql',
+        chain: 'wss://kusama.rpc.robonomics.network',
     },
     typesBundle: './typegen/typesBundle.json',
     batchSize: 100,

@@ -5,15 +5,15 @@ import { saveTransferEvent } from '../utils/base'
 
 function getEventData(ctx: EventHandlerContext): TransferData {
     const event = new BalancesTransferEvent(ctx)
-    if (event.isV3) {
-        const [from, to, amount] = event.asV3
+    if (event.isV5) {
+        const [from, to, amount] = event.asV5
         return {
             from,
             to,
             amount,
         }
-    } else if (event.isV700) {
-        const { from, to, amount } = event.asV700
+    } else if (event.isV8) {
+        const { from, to, amount } = event.asV8
         return {
             from,
             to,

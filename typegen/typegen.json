@@ -3,12 +3,18 @@
   "chainVersions": "./versions.json",
   "typesBundle": "./typesBundle.json",
   "events": [
-    "balances.Transfer"
+    "balances.Transfer",
+    "staking.Reward",
+    "staking.Bonded",
+    "staking.Unbonded"
   ],
   "calls": [
     "balances.transfer",
     "balances.force_transfer",
     "balances.transfer_keep_alive",
-    "balances.transfer_all"
+    "balances.transfer_all",
+    "staking.bond",
+    "staking.bond_extra",
+    "staking.unbond"
   ]
 }
