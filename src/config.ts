@@ -2,10 +2,10 @@ import { ProcessorConfig } from './types/custom/processorConfig'
 import { lookupArchive } from '@subsquid/archive-registry'
 
 const config: ProcessorConfig = {
-    chainName: 'statemine',
-    prefix: 2,
+    chainName: 'clover',
+    prefix: 'clover',
     dataSource: {
-        archive: lookupArchive('statemine')[0].url,
+        archive: lookupArchive('clover')[0].url,
         chain: 'wss://statemine.api.onfinality.io/public-ws',
     },
     typesBundle: './typegen/typesBundle.json',
