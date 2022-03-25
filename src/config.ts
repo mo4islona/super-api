@@ -2,11 +2,11 @@ import { ProcessorConfig } from './types/custom/processorConfig'
 import { lookupArchive } from '@subsquid/archive-registry'
 
 const config: ProcessorConfig = {
-    chainName: 'statemine',
-    prefix: 2,
+    chainName: 'subsocial',
+    prefix: 'subsocial',
     dataSource: {
-        archive: lookupArchive('statemine')[0].url,
-        chain: 'wss://statemine.api.onfinality.io/public-ws',
+        archive: lookupArchive('subsocial')[0].url,
+        chain: 'wss://arch.subsocial.network',
     },
     typesBundle: './typegen/typesBundle.json',
     batchSize: 100,

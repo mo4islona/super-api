@@ -1,7 +1,8 @@
 import assert from 'assert'
 import {CallContext, Result, deprecateLatest} from './support'
-import * as v3 from './v3'
-import * as v504 from './v504'
+import * as v10 from './v10'
+import * as v15 from './v15'
+import * as v17 from './v17'
 
 export class BalancesForceTransferCall {
   constructor(private ctx: CallContext) {
@@ -16,7 +17,32 @@ export class BalancesForceTransferCall {
    *    not assumed to be in the overlay.
    *  # </weight>
    */
-  get isV3(): boolean {
+  get isV1(): boolean {
+    return this.ctx._chain.getCallHash('balances.force_transfer') === '2fe8348cf811b833de74f02f6eeab668dbfad8a5d53274dd89837666ed3eb6fe'
+  }
+
+  /**
+   *  Exactly as `transfer`, except the origin must be root and the source account may be
+   *  specified.
+   *  # <weight>
+   *  - Same as transfer, but additional read and write because the source account is
+   *    not assumed to be in the overlay.
+   *  # </weight>
+   */
+  get asV1(): {source: Uint8Array, dest: Uint8Array, value: bigint} {
+    assert(this.isV1)
+    return this.ctx._chain.decodeCall(this.ctx.extrinsic)
+  }
+
+  /**
+   *  Exactly as `transfer`, except the origin must be root and the source account may be
+   *  specified.
+   *  # <weight>
+   *  - Same as transfer, but additional read and write because the source account is
+   *    not assumed to be in the overlay.
+   *  # </weight>
+   */
+  get isV10(): boolean {
     return this.ctx._chain.getCallHash('balances.force_transfer') === '906df11f4f65ebd03a2b87ba248e1fba11c3a0bca42c892bee828bac3ec80348'
   }
 
@@ -28,8 +54,8 @@ export class BalancesForceTransferCall {
    *    not assumed to be in the overlay.
    *  # </weight>
    */
-  get asV3(): {source: v3.GenericMultiAddress, dest: v3.GenericMultiAddress, value: bigint} {
-    assert(this.isV3)
+  get asV10(): {source: v10.GenericMultiAddress, dest: v10.GenericMultiAddress, value: bigint} {
+    assert(this.isV10)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
@@ -41,7 +67,7 @@ export class BalancesForceTransferCall {
    *   assumed to be in the overlay.
    * # </weight>
    */
-  get isV504(): boolean {
+  get isV17(): boolean {
     return this.ctx._chain.getCallHash('balances.force_transfer') === 'e5944fbe8224a17fe49f9c1d1d01efaf87fb1778fd39618512af54c9ba6f9dff'
   }
 
@@ -53,19 +79,19 @@ export class BalancesForceTransferCall {
    *   assumed to be in the overlay.
    * # </weight>
    */
-  get asV504(): {source: v504.MultiAddress, dest: v504.MultiAddress, value: bigint} {
-    assert(this.isV504)
+  get asV17(): {source: v17.MultiAddress, dest: v17.MultiAddress, value: bigint} {
+    assert(this.isV17)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
   get isLatest(): boolean {
     deprecateLatest()
-    return this.isV504
+    return this.isV17
   }
 
-  get asLatest(): {source: v504.MultiAddress, dest: v504.MultiAddress, value: bigint} {
+  get asLatest(): {source: v17.MultiAddress, dest: v17.MultiAddress, value: bigint} {
     deprecateLatest()
-    return this.asV504
+    return this.asV17
   }
 }
 
@@ -103,7 +129,74 @@ export class BalancesTransferCall {
    *  - Origin account is already in memory, so no DB operations for them.
    *  # </weight>
    */
-  get isV3(): boolean {
+  get isV1(): boolean {
+    return this.ctx._chain.getCallHash('balances.transfer') === 'cf5bb376709277883598390b3462e93b0f3c383df391c0649728c965e8da82fd'
+  }
+
+  /**
+   *  Transfer some liquid free balance to another account.
+   * 
+   *  `transfer` will set the `FreeBalance` of the sender and receiver.
+   *  It will decrease the total issuance of the system by the `TransferFee`.
+   *  If the sender's account is below the existential deposit as a result
+   *  of the transfer, the account will be reaped.
+   * 
+   *  The dispatch origin for this call must be `Signed` by the transactor.
+   * 
+   *  # <weight>
+   *  - Dependent on arguments but not critical, given proper implementations for
+   *    input config types. See related functions below.
+   *  - It contains a limited number of reads and writes internally and no complex computation.
+   * 
+   *  Related functions:
+   * 
+   *    - `ensure_can_withdraw` is always called internally but has a bounded complexity.
+   *    - Transferring balances to accounts that did not exist before will cause
+   *       `T::OnNewAccount::on_new_account` to be called.
+   *    - Removing enough funds from an account will trigger `T::DustRemoval::on_unbalanced`.
+   *    - `transfer_keep_alive` works the same way as `transfer`, but has an additional
+   *      check that the transfer will not kill the origin account.
+   *  ---------------------------------
+   *  - Base Weight: 73.64 µs, worst case scenario (account created, account removed)
+   *  - DB Weight: 1 Read and 1 Write to destination account
+   *  - Origin account is already in memory, so no DB operations for them.
+   *  # </weight>
+   */
+  get asV1(): {dest: Uint8Array, value: bigint} {
+    assert(this.isV1)
+    return this.ctx._chain.decodeCall(this.ctx.extrinsic)
+  }
+
+  /**
+   *  Transfer some liquid free balance to another account.
+   * 
+   *  `transfer` will set the `FreeBalance` of the sender and receiver.
+   *  It will decrease the total issuance of the system by the `TransferFee`.
+   *  If the sender's account is below the existential deposit as a result
+   *  of the transfer, the account will be reaped.
+   * 
+   *  The dispatch origin for this call must be `Signed` by the transactor.
+   * 
+   *  # <weight>
+   *  - Dependent on arguments but not critical, given proper implementations for
+   *    input config types. See related functions below.
+   *  - It contains a limited number of reads and writes internally and no complex computation.
+   * 
+   *  Related functions:
+   * 
+   *    - `ensure_can_withdraw` is always called internally but has a bounded complexity.
+   *    - Transferring balances to accounts that did not exist before will cause
+   *       `T::OnNewAccount::on_new_account` to be called.
+   *    - Removing enough funds from an account will trigger `T::DustRemoval::on_unbalanced`.
+   *    - `transfer_keep_alive` works the same way as `transfer`, but has an additional
+   *      check that the transfer will not kill the origin account.
+   *  ---------------------------------
+   *  - Base Weight: 73.64 µs, worst case scenario (account created, account removed)
+   *  - DB Weight: 1 Read and 1 Write to destination account
+   *  - Origin account is already in memory, so no DB operations for them.
+   *  # </weight>
+   */
+  get isV10(): boolean {
     return this.ctx._chain.getCallHash('balances.transfer') === 'c3f0f475940fc4bef49b298f76ba345680f20fc48d5899b4678314a07e2ce090'
   }
 
@@ -136,8 +229,8 @@ export class BalancesTransferCall {
    *  - Origin account is already in memory, so no DB operations for them.
    *  # </weight>
    */
-  get asV3(): {dest: v3.GenericMultiAddress, value: bigint} {
-    assert(this.isV3)
+  get asV10(): {dest: v10.GenericMultiAddress, value: bigint} {
+    assert(this.isV10)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
@@ -171,7 +264,7 @@ export class BalancesTransferCall {
    * - Origin account is already in memory, so no DB operations for them.
    * # </weight>
    */
-  get isV504(): boolean {
+  get isV17(): boolean {
     return this.ctx._chain.getCallHash('balances.transfer') === 'fc85bea9d0d171982f66e8a55667d58dc9a1612bcafe84309942bf47e23e3094'
   }
 
@@ -205,19 +298,19 @@ export class BalancesTransferCall {
    * - Origin account is already in memory, so no DB operations for them.
    * # </weight>
    */
-  get asV504(): {dest: v504.MultiAddress, value: bigint} {
-    assert(this.isV504)
+  get asV17(): {dest: v17.MultiAddress, value: bigint} {
+    assert(this.isV17)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
   get isLatest(): boolean {
     deprecateLatest()
-    return this.isV504
+    return this.isV17
   }
 
-  get asLatest(): {dest: v504.MultiAddress, value: bigint} {
+  get asLatest(): {dest: v17.MultiAddress, value: bigint} {
     deprecateLatest()
-    return this.asV504
+    return this.asV17
   }
 }
 
@@ -246,7 +339,7 @@ export class BalancesTransferAllCall {
    *  - O(1). Just like transfer, but reading the user's transferable balance first.
    *    #</weight>
    */
-  get isV3(): boolean {
+  get isV15(): boolean {
     return this.ctx._chain.getCallHash('balances.transfer_all') === '56952003e07947f758a9928d8462037abffea6a7fa991c0d3451f5c47d45f254'
   }
 
@@ -270,8 +363,8 @@ export class BalancesTransferAllCall {
    *  - O(1). Just like transfer, but reading the user's transferable balance first.
    *    #</weight>
    */
-  get asV3(): {dest: v3.GenericMultiAddress, keepAlive: boolean} {
-    assert(this.isV3)
+  get asV15(): {dest: v15.GenericMultiAddress, keepAlive: boolean} {
+    assert(this.isV15)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
@@ -294,7 +387,7 @@ export class BalancesTransferAllCall {
    * - O(1). Just like transfer, but reading the user's transferable balance first.
    *   #</weight>
    */
-  get isV504(): boolean {
+  get isV17(): boolean {
     return this.ctx._chain.getCallHash('balances.transfer_all') === '9c94c2ca9979f6551af6e123fb6b6ba14d026f862f9a023706f8f88c556b355f'
   }
 
@@ -317,19 +410,19 @@ export class BalancesTransferAllCall {
    * - O(1). Just like transfer, but reading the user's transferable balance first.
    *   #</weight>
    */
-  get asV504(): {dest: v504.MultiAddress, keepAlive: boolean} {
-    assert(this.isV504)
+  get asV17(): {dest: v17.MultiAddress, keepAlive: boolean} {
+    assert(this.isV17)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
   get isLatest(): boolean {
     deprecateLatest()
-    return this.isV504
+    return this.isV17
   }
 
-  get asLatest(): {dest: v504.MultiAddress, keepAlive: boolean} {
+  get asLatest(): {dest: v17.MultiAddress, keepAlive: boolean} {
     deprecateLatest()
-    return this.asV504
+    return this.asV17
   }
 }
 
@@ -344,14 +437,49 @@ export class BalancesTransferKeepAliveCall {
    * 
    *  99% of the time you want [`transfer`] instead.
    * 
-   *  [`transfer`]: struct.Pallet.html#method.transfer
+   *  [`transfer`]: struct.Module.html#method.transfer
    *  # <weight>
    *  - Cheaper than transfer because account cannot be killed.
    *  - Base Weight: 51.4 µs
    *  - DB Weight: 1 Read and 1 Write to dest (sender is in overlay already)
    *  #</weight>
    */
-  get isV3(): boolean {
+  get isV1(): boolean {
+    return this.ctx._chain.getCallHash('balances.transfer_keep_alive') === 'cf5bb376709277883598390b3462e93b0f3c383df391c0649728c965e8da82fd'
+  }
+
+  /**
+   *  Same as the [`transfer`] call, but with a check that the transfer will not kill the
+   *  origin account.
+   * 
+   *  99% of the time you want [`transfer`] instead.
+   * 
+   *  [`transfer`]: struct.Module.html#method.transfer
+   *  # <weight>
+   *  - Cheaper than transfer because account cannot be killed.
+   *  - Base Weight: 51.4 µs
+   *  - DB Weight: 1 Read and 1 Write to dest (sender is in overlay already)
+   *  #</weight>
+   */
+  get asV1(): {dest: Uint8Array, value: bigint} {
+    assert(this.isV1)
+    return this.ctx._chain.decodeCall(this.ctx.extrinsic)
+  }
+
+  /**
+   *  Same as the [`transfer`] call, but with a check that the transfer will not kill the
+   *  origin account.
+   * 
+   *  99% of the time you want [`transfer`] instead.
+   * 
+   *  [`transfer`]: struct.Module.html#method.transfer
+   *  # <weight>
+   *  - Cheaper than transfer because account cannot be killed.
+   *  - Base Weight: 51.4 µs
+   *  - DB Weight: 1 Read and 1 Write to dest (sender is in overlay already)
+   *  #</weight>
+   */
+  get isV10(): boolean {
     return this.ctx._chain.getCallHash('balances.transfer_keep_alive') === 'c3f0f475940fc4bef49b298f76ba345680f20fc48d5899b4678314a07e2ce090'
   }
 
@@ -361,15 +489,15 @@ export class BalancesTransferKeepAliveCall {
    * 
    *  99% of the time you want [`transfer`] instead.
    * 
-   *  [`transfer`]: struct.Pallet.html#method.transfer
+   *  [`transfer`]: struct.Module.html#method.transfer
    *  # <weight>
    *  - Cheaper than transfer because account cannot be killed.
    *  - Base Weight: 51.4 µs
    *  - DB Weight: 1 Read and 1 Write to dest (sender is in overlay already)
    *  #</weight>
    */
-  get asV3(): {dest: v3.GenericMultiAddress, value: bigint} {
-    assert(this.isV3)
+  get asV10(): {dest: v10.GenericMultiAddress, value: bigint} {
+    assert(this.isV10)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
@@ -386,7 +514,7 @@ export class BalancesTransferKeepAliveCall {
    * - DB Weight: 1 Read and 1 Write to dest (sender is in overlay already)
    * #</weight>
    */
-  get isV504(): boolean {
+  get isV17(): boolean {
     return this.ctx._chain.getCallHash('balances.transfer_keep_alive') === 'fc85bea9d0d171982f66e8a55667d58dc9a1612bcafe84309942bf47e23e3094'
   }
 
@@ -403,18 +531,18 @@ export class BalancesTransferKeepAliveCall {
    * - DB Weight: 1 Read and 1 Write to dest (sender is in overlay already)
    * #</weight>
    */
-  get asV504(): {dest: v504.MultiAddress, value: bigint} {
-    assert(this.isV504)
+  get asV17(): {dest: v17.MultiAddress, value: bigint} {
+    assert(this.isV17)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
   get isLatest(): boolean {
     deprecateLatest()
-    return this.isV504
+    return this.isV17
   }
 
-  get asLatest(): {dest: v504.MultiAddress, value: bigint} {
+  get asLatest(): {dest: v17.MultiAddress, value: bigint} {
     deprecateLatest()
-    return this.asV504
+    return this.asV17
   }
 }
