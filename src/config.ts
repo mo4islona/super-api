@@ -2,13 +2,13 @@ import { ProcessorConfig } from './types/custom/processorConfig'
 import { lookupArchive } from '@subsquid/archive-registry'
 
 const config: ProcessorConfig = {
-    chainName: 'statemine',
-    prefix: 2,
+    chainName: 'khala',
+    prefix: 'phala',
     dataSource: {
-        archive: lookupArchive('statemine')[0].url,
-        chain: 'wss://statemine.api.onfinality.io/public-ws',
+        archive: lookupArchive('khala')[0].url,
+        chain: 'wss://khala.api.onfinality.io/public-ws',
     },
-    typesBundle: './typegen/typesBundle.json',
+    typesBundle: 'khala',
     batchSize: 100,
     // blockRange: {
     //     from: 7828270,
