@@ -12,8 +12,8 @@ function getCallData(ctx: ExtrinsicHandlerContext): TransferData | undefined {
             to: dest.value as Uint8Array,
             amount: value,
         }
-    } else if (call.isV504) {
-        const { source, dest, value } = call.asV504
+    } else if (call.isV1) {
+        const { source, dest, value } = call.asV1
         return {
             from: source.value as Uint8Array,
             to: dest.value as Uint8Array,

@@ -1,7 +1,7 @@
 import assert from 'assert'
 import {CallContext, Result, deprecateLatest} from './support'
+import * as v1 from './v1'
 import * as v3 from './v3'
-import * as v504 from './v504'
 
 export class BalancesForceTransferCall {
   constructor(private ctx: CallContext) {
@@ -16,7 +16,7 @@ export class BalancesForceTransferCall {
    *    not assumed to be in the overlay.
    *  # </weight>
    */
-  get isV3(): boolean {
+  get isV1(): boolean {
     return this.ctx._chain.getCallHash('balances.force_transfer') === '906df11f4f65ebd03a2b87ba248e1fba11c3a0bca42c892bee828bac3ec80348'
   }
 
@@ -28,8 +28,8 @@ export class BalancesForceTransferCall {
    *    not assumed to be in the overlay.
    *  # </weight>
    */
-  get asV3(): {source: v3.GenericMultiAddress, dest: v3.GenericMultiAddress, value: bigint} {
-    assert(this.isV3)
+  get asV1(): {source: v1.GenericMultiAddress, dest: v1.GenericMultiAddress, value: bigint} {
+    assert(this.isV1)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
@@ -41,7 +41,7 @@ export class BalancesForceTransferCall {
    *   assumed to be in the overlay.
    * # </weight>
    */
-  get isV504(): boolean {
+  get isV3(): boolean {
     return this.ctx._chain.getCallHash('balances.force_transfer') === 'e5944fbe8224a17fe49f9c1d1d01efaf87fb1778fd39618512af54c9ba6f9dff'
   }
 
@@ -53,19 +53,19 @@ export class BalancesForceTransferCall {
    *   assumed to be in the overlay.
    * # </weight>
    */
-  get asV504(): {source: v504.MultiAddress, dest: v504.MultiAddress, value: bigint} {
-    assert(this.isV504)
+  get asV3(): {source: v3.MultiAddress, dest: v3.MultiAddress, value: bigint} {
+    assert(this.isV3)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
   get isLatest(): boolean {
     deprecateLatest()
-    return this.isV504
+    return this.isV3
   }
 
-  get asLatest(): {source: v504.MultiAddress, dest: v504.MultiAddress, value: bigint} {
+  get asLatest(): {source: v3.MultiAddress, dest: v3.MultiAddress, value: bigint} {
     deprecateLatest()
-    return this.asV504
+    return this.asV3
   }
 }
 
@@ -103,7 +103,7 @@ export class BalancesTransferCall {
    *  - Origin account is already in memory, so no DB operations for them.
    *  # </weight>
    */
-  get isV3(): boolean {
+  get isV1(): boolean {
     return this.ctx._chain.getCallHash('balances.transfer') === 'c3f0f475940fc4bef49b298f76ba345680f20fc48d5899b4678314a07e2ce090'
   }
 
@@ -136,8 +136,8 @@ export class BalancesTransferCall {
    *  - Origin account is already in memory, so no DB operations for them.
    *  # </weight>
    */
-  get asV3(): {dest: v3.GenericMultiAddress, value: bigint} {
-    assert(this.isV3)
+  get asV1(): {dest: v1.GenericMultiAddress, value: bigint} {
+    assert(this.isV1)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
@@ -171,7 +171,7 @@ export class BalancesTransferCall {
    * - Origin account is already in memory, so no DB operations for them.
    * # </weight>
    */
-  get isV504(): boolean {
+  get isV3(): boolean {
     return this.ctx._chain.getCallHash('balances.transfer') === 'fc85bea9d0d171982f66e8a55667d58dc9a1612bcafe84309942bf47e23e3094'
   }
 
@@ -205,19 +205,19 @@ export class BalancesTransferCall {
    * - Origin account is already in memory, so no DB operations for them.
    * # </weight>
    */
-  get asV504(): {dest: v504.MultiAddress, value: bigint} {
-    assert(this.isV504)
+  get asV3(): {dest: v3.MultiAddress, value: bigint} {
+    assert(this.isV3)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
   get isLatest(): boolean {
     deprecateLatest()
-    return this.isV504
+    return this.isV3
   }
 
-  get asLatest(): {dest: v504.MultiAddress, value: bigint} {
+  get asLatest(): {dest: v3.MultiAddress, value: bigint} {
     deprecateLatest()
-    return this.asV504
+    return this.asV3
   }
 }
 
@@ -246,7 +246,7 @@ export class BalancesTransferAllCall {
    *  - O(1). Just like transfer, but reading the user's transferable balance first.
    *    #</weight>
    */
-  get isV3(): boolean {
+  get isV1(): boolean {
     return this.ctx._chain.getCallHash('balances.transfer_all') === '56952003e07947f758a9928d8462037abffea6a7fa991c0d3451f5c47d45f254'
   }
 
@@ -270,8 +270,8 @@ export class BalancesTransferAllCall {
    *  - O(1). Just like transfer, but reading the user's transferable balance first.
    *    #</weight>
    */
-  get asV3(): {dest: v3.GenericMultiAddress, keepAlive: boolean} {
-    assert(this.isV3)
+  get asV1(): {dest: v1.GenericMultiAddress, keepAlive: boolean} {
+    assert(this.isV1)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
@@ -294,7 +294,7 @@ export class BalancesTransferAllCall {
    * - O(1). Just like transfer, but reading the user's transferable balance first.
    *   #</weight>
    */
-  get isV504(): boolean {
+  get isV3(): boolean {
     return this.ctx._chain.getCallHash('balances.transfer_all') === '9c94c2ca9979f6551af6e123fb6b6ba14d026f862f9a023706f8f88c556b355f'
   }
 
@@ -317,19 +317,19 @@ export class BalancesTransferAllCall {
    * - O(1). Just like transfer, but reading the user's transferable balance first.
    *   #</weight>
    */
-  get asV504(): {dest: v504.MultiAddress, keepAlive: boolean} {
-    assert(this.isV504)
+  get asV3(): {dest: v3.MultiAddress, keepAlive: boolean} {
+    assert(this.isV3)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
   get isLatest(): boolean {
     deprecateLatest()
-    return this.isV504
+    return this.isV3
   }
 
-  get asLatest(): {dest: v504.MultiAddress, keepAlive: boolean} {
+  get asLatest(): {dest: v3.MultiAddress, keepAlive: boolean} {
     deprecateLatest()
-    return this.asV504
+    return this.asV3
   }
 }
 
@@ -351,7 +351,7 @@ export class BalancesTransferKeepAliveCall {
    *  - DB Weight: 1 Read and 1 Write to dest (sender is in overlay already)
    *  #</weight>
    */
-  get isV3(): boolean {
+  get isV1(): boolean {
     return this.ctx._chain.getCallHash('balances.transfer_keep_alive') === 'c3f0f475940fc4bef49b298f76ba345680f20fc48d5899b4678314a07e2ce090'
   }
 
@@ -368,8 +368,8 @@ export class BalancesTransferKeepAliveCall {
    *  - DB Weight: 1 Read and 1 Write to dest (sender is in overlay already)
    *  #</weight>
    */
-  get asV3(): {dest: v3.GenericMultiAddress, value: bigint} {
-    assert(this.isV3)
+  get asV1(): {dest: v1.GenericMultiAddress, value: bigint} {
+    assert(this.isV1)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
@@ -386,7 +386,7 @@ export class BalancesTransferKeepAliveCall {
    * - DB Weight: 1 Read and 1 Write to dest (sender is in overlay already)
    * #</weight>
    */
-  get isV504(): boolean {
+  get isV3(): boolean {
     return this.ctx._chain.getCallHash('balances.transfer_keep_alive') === 'fc85bea9d0d171982f66e8a55667d58dc9a1612bcafe84309942bf47e23e3094'
   }
 
@@ -403,18 +403,18 @@ export class BalancesTransferKeepAliveCall {
    * - DB Weight: 1 Read and 1 Write to dest (sender is in overlay already)
    * #</weight>
    */
-  get asV504(): {dest: v504.MultiAddress, value: bigint} {
-    assert(this.isV504)
+  get asV3(): {dest: v3.MultiAddress, value: bigint} {
+    assert(this.isV3)
     return this.ctx._chain.decodeCall(this.ctx.extrinsic)
   }
 
   get isLatest(): boolean {
     deprecateLatest()
-    return this.isV504
+    return this.isV3
   }
 
-  get asLatest(): {dest: v504.MultiAddress, value: bigint} {
+  get asLatest(): {dest: v3.MultiAddress, value: bigint} {
     deprecateLatest()
-    return this.asV504
+    return this.asV3
   }
 }

@@ -31,7 +31,7 @@ typegen: ./typegen/versions.json
 
 
 explore:
-	@npx squid-substrate-metadata-explorer --chain wss://statemine.api.onfinality.io/public-ws --archive https://statemine.indexer.gc.subsquid.io/v4/graphql --out ./typegen/versions.json
+	@npx squid-substrate-metadata-explorer --chain wss://calamari.api.onfinality.io/public-ws --archive https://calamari.indexer.gc.subsquid.io/v4/graphql --out ./typegen/versions.json
 
 
 up:
