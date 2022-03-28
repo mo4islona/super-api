@@ -2,13 +2,13 @@ import { ProcessorConfig } from './types/custom/processorConfig'
 import { lookupArchive } from '@subsquid/archive-registry'
 
 const config: ProcessorConfig = {
-    chainName: 'statemine',
-    prefix: 2,
+    chainName: 'kilt',
+    prefix: 'kilt',
     dataSource: {
-        archive: lookupArchive('statemine')[0].url,
-        chain: 'wss://statemine.api.onfinality.io/public-ws',
+        archive: lookupArchive('kilt')[0].url,
+        chain: 'wss://spiritnet.kilt.io/',
     },
-    typesBundle: './typegen/typesBundle.json',
+    typesBundle: 'kilt',
     batchSize: 100,
     // blockRange: {
     //     from: 7828270,
